@@ -1,56 +1,19 @@
 <?php 
 
 //Connects to your Database 
- mysql_connect("localhost", "root", "") or die(mysql_error()); 
+ mysql_connect("localhost", "root", "acerola") or die(mysql_error()); 
  mysql_select_db("carteirinha") or die(mysql_error());
+$username = $_POST['username']; 
+
+$pass = $_POST['password'];
 
 
- //Checks if there is a login cookie
- if(isset($_COOKIE['ID_my_site']))
-
-
- //if there is, it logs you in and directes you to the members page
- { 
- 	$username = $_COOKIE['ID_my_site']; 
-
- 	$pass = $_COOKIE['Key_my_site'];
-
- 	 	$check = mysql_query("SELECT * FROM users WHERE username = '$username'")or die(mysql_error());
-
- 	while($info = mysql_fetch_array( $check )) 	
-
- 		{
-
- 		if ($pass != $info['password']) 
-
- 			{
-
- 			 			}
-
- 		else
-
- 			{
-
- 			header("Location: index.php");
-
-
-
- 			}
-
- 		}
-
- }
-
-
- //if the login form is submitted 
-
- if (isset($_POST['submit'])) { // if form has been submitted
-
+ if (isset($_POST)) { // if form has been submitted
 
 
  // makes sure they filled it in
 
- 	if(!$_POST['username'] | !$_POST['pass']) {
+ 	if(!$_POST['username'] | !$_POST['password']) {
 
  		die('You did not fill in a required field.');
 
@@ -84,17 +47,17 @@
 
  {
 
- $_POST['pass'] = stripslashes($_POST['pass']);
+ $_POST['password'] = stripslashes($_POST['password']);
 
  	$info['password'] = stripslashes($info['password']);
 
- 	$_POST['pass'] = md5($_POST['pass']);
+ 	$pass = md5($_POST['password']);
 
 
 
  //gives error if the password is wrong
 
- 	if ($_POST['pass'] != $info['password']) {
+ 	if ($pass != $info['password']) {
 
  		die('Incorrect password, please try again.');
 
@@ -109,7 +72,7 @@
 $_POST['username'] = stripslashes($_POST['username']); 
 $hour = time() + 3600; 
 setcookie(ID_my_site, $_POST['username'], $hour); 
-setcookie(Key_my_site, $_POST['pass'], $hour);	 
+setcookie(Key_my_site, $pass, $hour);	 
  
 //then redirect them to the members area 
 header("Location: index.php"); 
